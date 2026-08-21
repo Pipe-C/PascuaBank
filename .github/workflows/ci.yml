@@ -23,11 +23,12 @@ jobs:
             client/package-lock.json
             server/package-lock.json
 
+      # --- FRONTEND (CLIENT) ---
       - name: Instalar dependencias Frontend
         run: npm ci
         working-directory: ./client
 
-      - name: Validar Linter (Calidad de código) Frontend
+      - name: Validar Linter Frontend
         run: npm run lint --if-present
         working-directory: ./client
 
@@ -39,11 +40,16 @@ jobs:
         run: npm run build
         working-directory: ./client
 
+      # --- BACKEND (SERVER) ---
       - name: Instalar dependencias Backend
         run: npm ci
         working-directory: ./server
 
-      - name: Validar Linter (Calidad de código) Backend
+      - name: Generar cliente de Prisma Backend
+        run: npx prisma generate
+        working-directory: ./server
+
+      - name: Validar Linter Backend
         run: npm run lint --if-present
         working-directory: ./server
 
@@ -54,3 +60,4 @@ jobs:
       - name: Validar Compilación (Build) Backend
         run: npm run build
         working-directory: ./server
+
