@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: pascuabank-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pascuabank
+      POSTGRES_PASSWORD: pascuabank_dev_only
+      POSTGRES_DB: pascuabank
+    ports:
+      - "5432:5432"
+    volumes:
+      - pascuabank_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pascuabank -d pascuabank"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pascuabank_pgdata:
