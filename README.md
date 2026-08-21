@@ -74,12 +74,11 @@ PascuaBank/
 │   ├── nest-cli.json
 │   └── prisma.config.ts
 │
-├── AGENTS.md                 # Contexto para agentes de IA (Antigravity, Claude, Windsurf) — global al monorepo
 ├── docker-compose.yml         # PostgreSQL local para desarrollo (credenciales dummy, no usar en producción)
 └── README.md
 ```
 
-> 💡 El proyecto incluye configuración de contexto para asistentes de IA (`AGENTS.md`, `.claude/`, `.windsurf/`), utilizados durante el desarrollo con **Antigravity**.
+
 
 ---
 
@@ -176,7 +175,7 @@ Cliente disponible en: `http://localhost:5173`
 ## 📖 Documentación de la API
 
 - **Swagger UI:** `http://localhost:3000/api/docs` — interfaz interactiva para probar endpoints en tiempo real.
-- **Postman Collection:** archivo JSON con requests preconfigurados (Deposit, Withdraw, Get Balance) y variables de entorno para pruebas automatizadas. Ubicación: `server/postman/` *(ajustar según ubicación real)*.
+- **Postman Collection:** archivo JSON con requests preconfigurados (Deposit, Withdraw, Get Balance) y variables de entorno para pruebas automatizadas. Ubicación: `server/postman/`.
 
 ---
 
