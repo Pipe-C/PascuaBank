@@ -1,0 +1,12 @@
+# Root .gitignore
+AGENTS.md
+PROGRESS.md
+.DS_Store
+.vscode/
+.idea/
+*.log
+.env
+node_modules/
+dist/
+build/
+.env*.local
