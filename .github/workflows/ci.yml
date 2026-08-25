@@ -1,0 +1,63 @@
+name: Integración Continua (CI)
+
+on:
+  push:
+    branches: [ main, dev, develop ]
+  pull_request:
+    branches: [ main, dev, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: |
+            client/package-lock.json
+            server/package-lock.json
+
+      # --- FRONTEND (CLIENT) ---
+      - name: Instalar dependencias Frontend
+        run: npm ci
+        working-directory: ./client
+
+      - name: Validar Linter Frontend
+        run: npm run lint --if-present
+        working-directory: ./client
+
+      - name: Ejecutar Pruebas Unitarias Frontend
+        run: npm run test --if-present
+        working-directory: ./client
+
+      - name: Validar Compilación (Build) Frontend
+        run: npm run build
+        working-directory: ./client
+
+      # --- BACKEND (SERVER) ---
+      - name: Instalar dependencias Backend
+        run: npm ci
+        working-directory: ./server
+
+      - name: Generar cliente de Prisma Backend
+        run: npx prisma generate
+        working-directory: ./server
+
+      - name: Validar Linter Backend
+        run: npm run lint --if-present
+        working-directory: ./server
+
+      - name: Ejecutar Pruebas Unitarias Backend
+        run: npm run test --if-present
+        working-directory: ./server
+
+      - name: Validar Compilación (Build) Backend
+        run: npm run build
+        working-directory: ./server
+
