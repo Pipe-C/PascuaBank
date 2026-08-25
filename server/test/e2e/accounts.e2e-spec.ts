@@ -34,8 +34,9 @@ describe('AccountsController (e2e)', () => {
 
     const createdAccount = await prisma.account.create({
       data: {
-        accountNumber: '999888777',
-        holderName: 'Cliente Prueba E2E',
+        ownerName: 'Cliente Prueba E2E', // Actualizado
+        ownerDocument: '1098765432',
+        currency: 'COP',
         balance: 1000.0,
         type: 'SAVINGS',
       },
