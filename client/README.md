@@ -107,6 +107,29 @@ El diseño visual evita patrones genéricos y adopta una identidad sobria inspir
 - **Accesibilidad WCAG AA:** Ratios de contraste calculados que superan el estándar mínimo de `4.5:1` (alcanzando `5.0:1` a `13.6:1` en elementos clave de ambos modos).
 - **Tipografía Financiera:** Google Fonts `JetBrains Mono` (`font-financial`) reservada exclusivamente para montos y números de cuenta; `Inter` para la interfaz general.
 
+### Mockup de Layout de Interfaz (UI Wireframe)
+
+```mermaid
+graph TD
+    subgraph UI_Layout ["🎨 Componentes Principales del Dashboard"]
+        Header["Header: Logo + Identidad PascuaBank + Info Titular + Toggle Tema"]
+        BalanceCard["BalanceCard: Saldo animado en COP + Divisor Ámbar + Toggle Visibilidad"]
+        TransactionPanel["TransactionPanel: Layout Grid Orquestador de Operaciones"]
+        DepositForm["DepositForm: Input de miles en vivo + Validación > $0 + CTA Verde"]
+        WithdrawForm["WithdrawForm: Input de miles + Validación <= Saldo + CTA Rojo"]
+        TransactionHistory["TransactionHistory: Tabla responsiva + Stagger + Hover Ámbar"]
+        Toast["NotificationToast: Feedback flotante 200 OK / 400 Error"]
+    end
+
+    Header --> BalanceCard
+    BalanceCard --> TransactionPanel
+    TransactionPanel --> DepositForm
+    TransactionPanel --> WithdrawForm
+    TransactionPanel --> TransactionHistory
+    DepositForm -. Operación .-> Toast
+    WithdrawForm -. Operación .-> Toast
+```
+
 ---
 
 ## 5. Resiliencia y Manejo Global de Errores
