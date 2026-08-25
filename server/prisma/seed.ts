@@ -1,6 +1,14 @@
 import { PrismaClient, AccountType } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
-const prisma = new PrismaClient();
+const connectionString =
+  process.env.DATABASE_URL ||
+  'postgresql://pascuabank:pascuabank_dev_only@localhost:5432/pascuabank?schema=public';
+
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   await prisma.transaction.deleteMany();
@@ -8,18 +16,18 @@ async function main() {
 
   const account = await prisma.account.create({
     data: {
-      id: 'acc-123',
+      id: '1',
       accountNumber: '100200300',
       holderName: 'Usuario PascuaBank',
-      balance: 1500000.00,
+      balance: 1500000.0,
       type: AccountType.SAVINGS,
       transactions: {
         create: [
           {
-            amount: 1500000.00,
+            amount: 1500000.0,
             type: 'DEPOSIT',
             description: 'Depósito inicial de apertura',
-            balanceAfter: 1500000.00,
+            balanceAfter: 1500000.0,
           },
         ],
       },
@@ -36,4 +44,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
   });

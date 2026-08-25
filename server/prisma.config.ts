@@ -6,9 +6,9 @@ import { defineConfig } from "prisma/config";
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
-    path: "prisma/migrations",
+    seed: "ts-node prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: process.env["DATABASE_URL"] || 'postgresql://pascuabank:pascuabank_dev_only@localhost:5432/pascuabank?schema=public',
   },
 });
