@@ -22,8 +22,8 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 
 | Integrante | Rol | Responsabilidades Principales |
 | :--- | :--- | :--- |
-| **Integrante 1** | Backend & Data Architect | API REST en NestJS, esquema Prisma ORM, reglas de negocio, DTOs y documentación Swagger. |
-| **Integrante 2** | Frontend & Product Lead | UI/UX en React + Vite, integración Axios, validaciones en cliente, documentación y presentación. |
+| **Andrés Goez** | Backend & Data Architect | API REST en NestJS, esquema Prisma ORM, reglas de negocio, DTOs y documentación Swagger. |
+| **Felipe Cano** | Frontend & Product Lead | UI/UX en React + Vite, integración Axios, validaciones en cliente, documentación y presentación. |
 
 ---
 
