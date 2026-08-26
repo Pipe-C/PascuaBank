@@ -1,13 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  'postgresql://pascuabank:pascuabank_dev_only@localhost:5432/pascuabank?schema=public';
-
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool);
+const adapter = new PrismaBetterSqlite3({ url: 'prisma/dev.db' });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -37,7 +31,7 @@ async function main() {
     },
   });
 
-  console.log('🌱 Seed completado exitosamente. Cuenta de prueba:', account.id);
+  console.log(' Seed completado exitosamente. Cuenta de prueba:', account.id);
 }
 
 main()
@@ -47,5 +41,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-    await pool.end();
   });
