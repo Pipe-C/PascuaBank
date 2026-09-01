@@ -1,4 +1,4 @@
-import { PrismaClient, AccountType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
@@ -18,9 +18,11 @@ async function main() {
     data: {
       id: '1',
       accountNumber: '100200300',
-      holderName: 'Usuario PascuaBank',
+      ownerName: 'Usuario PascuaBank',
+      ownerDocument: '123456789',
+      currency: 'COP',
       balance: 1500000.0,
-      type: AccountType.SAVINGS,
+      type: 'SAVINGS',
       transactions: {
         create: [
           {
@@ -28,6 +30,7 @@ async function main() {
             type: 'DEPOSIT',
             description: 'Depósito inicial de apertura',
             balanceAfter: 1500000.0,
+            date: new Date(),
           },
         ],
       },

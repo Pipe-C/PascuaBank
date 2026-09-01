@@ -14,7 +14,7 @@ export class AccountsService {
       where: { id: accountId },
       include: {
         transactions: {
-          orderBy: { createdAt: 'desc' },
+          orderBy: { date: 'desc' },
         },
       },
     });
@@ -112,7 +112,7 @@ export class AccountsService {
       where: { id: accountId },
       include: {
         transactions: {
-          orderBy: { createdAt: 'desc' },
+          orderBy: { date: 'desc' },
         },
       },
     });
@@ -125,15 +125,17 @@ export class AccountsService {
   private mapToResponse(account: any) {
     return {
       id: account.id,
+      ownerName: account.ownerName,
+      ownerDocument: account.ownerDocument,
       accountNumber: account.accountNumber,
-      holderName: account.holderName,
       balance: Number(account.balance),
+      currency: account.currency,
       type: account.type,
       transactions: account.transactions.map((t: any) => ({
         id: t.id,
         type: t.type,
         amount: Number(t.amount),
-        date: t.createdAt.toISOString(),
+        date: t.date ? t.date.toISOString() : new Date().toISOString(),
         description: t.description,
         balanceAfter: Number(t.balanceAfter),
       })),

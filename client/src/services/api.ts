@@ -77,13 +77,8 @@ export const api = {
 
     try {
       const response = await apiClient.get<Account>(`/accounts/${accountId}`);
-      const data = await response.data;
+      return response.data;
 
-      return {
-        ...data,
-        ownerName: data.holderName || data.ownerName || 'Cliente',
-        balance: Number(data.balance), // Asegura conversión a número si Prisma devuelve Decimal
-      };
     } catch (error) {
       throw normalizeApiError(error);
     }
@@ -118,14 +113,8 @@ export const api = {
       const response = await apiClient.post<Account>(`/accounts/${accountId}/deposit`, {
         amount,
       });
-      const data = await response.data;
+      return response.data;
 
-      return {
-        ...data,
-        ownerName: data.holderName || data.ownerName || 'Cliente',
-        balance: Number(data.balance), // Asegura conversión a número si Prisma devuelve Decimal
-      };
- 
     } catch (error) {
       throw normalizeApiError(error);
     }
@@ -168,12 +157,7 @@ export const api = {
       const response = await apiClient.post<Account>(`/accounts/${accountId}/withdraw`, {
         amount,
       });
-      const data = await response.data;
-      return {
-        ...data,
-        ownerName: data.holderName || data.ownerName || 'Cliente',
-        balance: Number(data.balance), // Asegura conversión a número si Prisma devuelve Decimal
-      };
+      return response.data;
  
     } catch (error) {
       throw normalizeApiError(error);
