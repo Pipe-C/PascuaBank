@@ -78,6 +78,7 @@ export const api = {
     try {
       const response = await apiClient.get<Account>(`/accounts/${accountId}`);
       return response.data;
+
     } catch (error) {
       throw normalizeApiError(error);
     }
@@ -113,6 +114,7 @@ export const api = {
         amount,
       });
       return response.data;
+
     } catch (error) {
       throw normalizeApiError(error);
     }
@@ -156,6 +158,7 @@ export const api = {
         amount,
       });
       return response.data;
+ 
     } catch (error) {
       throw normalizeApiError(error);
     }
