@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { AccountsService } from './accounts.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { AccountsService } from '../../src/accounts/accounts.service';
+import { PrismaService } from '../../src/prisma/prisma.service';
 import { TransactionType } from '@prisma/client';
 
 describe('AccountsService', () => {

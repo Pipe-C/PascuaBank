@@ -9,24 +9,7 @@ type AccountWithTransactions = Prisma.AccountGetPayload<{
 
 @Injectable()
 export class AccountsService {
-  constructor(private readonly prisma: PrismaService) {
-    const connectionString =
-      process.env.DATABASE_URL ||
-      'postgresql://pascuabank:pascuabank_dev_only@localhost:5432/pascuabank?schema=public';
-
-    const pool = new Pool({ connectionString });
-    const adapter = new PrismaPg(pool);
-
-    super({ adapter });
-  }
-
-  async onModuleInit() {
-    await this.$connect();
-  }
-
-  async onModuleDestroy() {
-    await this.$disconnect();
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Obtiene la cuenta por su ID junto con el historial ordenado de transacciones.
