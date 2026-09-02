@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import * as path from 'path';
 
-const adapter = new PrismaBetterSqlite3({ url: 'prisma/dev.db' });
+// Apunta al archivo dev.db en la raíz de 'server'
+const dbPath = path.join(process.cwd(), 'dev.db');
+const adapter = new PrismaBetterSqlite3({ url: dbPath });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
