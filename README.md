@@ -4,8 +4,25 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 
 ---
 
+## 📸 Vista Previa del Sistema
+
+<div align="center">
+
+### Menú Principal de la Aplicación
+![Menú Principal](./.github/assets/foto_menu.png)
+
+<br />
+
+### Documentación Interactiva de la API (Swagger)
+![Swagger API](./.github/assets/pascuabank_api.png)
+
+</div>
+
+---
+
 ## 📑 Tabla de Contenidos
 
+- [Vista Previa del Sistema](#-vista-previa-del-sistema)
 - [Integrantes y Roles](#-integrantes-y-distribución-de-roles-50--50)
 - [Stack Tecnológico](#️-stack-tecnológico)
 - [Arquitectura](#-arquitectura)
@@ -60,6 +77,8 @@ Controllers → DTOs (validación) → Services (reglas de negocio) → Reposito
 
 ```
 PascuaBank/
+├── .github/
+│   └── assets/              # Capturas de pantalla e imágenes de documentación
 ├── client/                  # Frontend - React + Vite + TypeScript
 │   ├── public/
 │   ├── src/
@@ -68,17 +87,15 @@ PascuaBank/
 │   └── vite.config.ts
 │
 ├── server/                  # Backend - NestJS + Prisma
-│   ├── prisma/               # Esquema y migraciones de base de datos
-│   ├── src/                  # Controllers, Services, DTOs
-│   ├── test/                 # Pruebas unitarias / e2e
+│   ├── prisma/              # Esquema y migraciones de base de datos
+│   ├── src/                 # Controllers, Services, DTOs
+│   ├── test/                # Pruebas unitarias / e2e
 │   ├── nest-cli.json
 │   └── prisma.config.ts
 │
-├── docker-compose.yml         # PostgreSQL local para desarrollo (credenciales dummy, no usar en producción)
+├── docker-compose.yml        # PostgreSQL local para desarrollo (credenciales dummy, no usar en producción)
 └── README.md
 ```
-
-
 
 ---
 
