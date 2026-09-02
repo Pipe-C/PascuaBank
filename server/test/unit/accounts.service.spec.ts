@@ -1,27 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { AccountsService } from '../../src/accounts/accounts.service';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { AccountsService } from './accounts.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { TransactionType } from '@prisma/client';
 
 describe('AccountsService', () => {
   let service: AccountsService;
-  let prismaService: PrismaService;
 
   const mockAccount = {
     id: 'acc-123',
     accountNumber: '100200300',
-    holderName: 'Juan Pérez',
+    ownerName: 'Juan Pérez',
+    ownerDocument: '123456789',
+    currency: 'COP',
     balance: 50000.0,
     type: 'SAVINGS',
+    createdAt: new Date('2026-01-01T10:00:00.000Z'),
+    updatedAt: new Date('2026-01-01T10:00:00.000Z'),
     transactions: [
       {
         id: 'txn-1',
+        accountId: 'acc-123',
         type: TransactionType.DEPOSIT,
         amount: 50000.0,
         description: 'Consignación inicial',
         balanceAfter: 50000.0,
-        createdAt: new Date('2026-01-01T10:00:00.000Z'),
+        date: new Date('2026-01-01T10:00:00.000Z'),
       },
     ],
   };
@@ -34,7 +38,9 @@ describe('AccountsService', () => {
     transaction: {
       create: jest.fn(),
     },
-    $transaction: jest.fn((callback) => callback(mockPrismaService)),
+    $transaction: jest.fn().mockImplementation(
+      (callback: (tx: typeof mockPrismaService) => unknown) => callback(mockPrismaService),
+    ),
   };
 
   beforeEach(async () => {
@@ -49,7 +55,6 @@ describe('AccountsService', () => {
     }).compile();
 
     service = module.get<AccountsService>(AccountsService);
-    prismaService = module.get<PrismaService>(PrismaService);
 
     jest.clearAllMocks();
   });
@@ -63,7 +68,9 @@ describe('AccountsService', () => {
       expect(result).toEqual({
         id: 'acc-123',
         accountNumber: '100200300',
-        holderName: 'Juan Pérez',
+        ownerName: 'Juan Pérez',
+        ownerDocument: '123456789',
+        currency: 'COP',
         balance: 50000.0,
         type: 'SAVINGS',
         transactions: [
@@ -81,7 +88,7 @@ describe('AccountsService', () => {
         where: { id: 'acc-123' },
         include: {
           transactions: {
-            orderBy: { createdAt: 'desc' },
+            orderBy: { date: 'desc' },
           },
         },
       });
@@ -105,11 +112,12 @@ describe('AccountsService', () => {
         transactions: [
           {
             id: 'txn-2',
+            accountId: 'acc-123',
             type: TransactionType.DEPOSIT,
             amount: 50.0,
             description: 'Consignación en cuenta',
             balanceAfter: 150.0,
-            createdAt: new Date('2026-01-02T10:00:00.000Z'),
+            date: new Date('2026-01-02T10:00:00.000Z'),
           },
         ],
       };
@@ -154,11 +162,12 @@ describe('AccountsService', () => {
         transactions: [
           {
             id: 'txn-3',
+            accountId: 'acc-123',
             type: TransactionType.WITHDRAWAL,
             amount: 200.0,
             description: 'Retiro de fondos',
             balanceAfter: 300.0,
-            createdAt: new Date('2026-01-03T10:00:00.000Z'),
+            date: new Date('2026-01-03T10:00:00.000Z'),
           },
         ],
       };

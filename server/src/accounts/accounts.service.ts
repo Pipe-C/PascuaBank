@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { TransactionType } from '@prisma/client';
+import { Prisma, TransactionType } from '@prisma/client';
+
+// Tipo fuertemente tipado para la cuenta incluyendo la relación con transacciones
+type AccountWithTransactions = Prisma.AccountGetPayload<{
+  include: { transactions: true };
+}>;
 
 @Injectable()
 export class AccountsService {
@@ -107,7 +112,7 @@ export class AccountsService {
     });
   }
 
-  private async getAccountWithTx(tx: any, accountId: string) {
+  private async getAccountWithTx(tx: Prisma.TransactionClient, accountId: string) {
     const account = await tx.account.findUnique({
       where: { id: accountId },
       include: {
@@ -116,13 +121,18 @@ export class AccountsService {
         },
       },
     });
+
+    if (!account) {
+      throw new NotFoundException('La cuenta bancaria solicitada no fue encontrada.');
+    }
+
     return this.mapToResponse(account);
   }
 
   /**
    * Formatea los datos de Prisma a la interfaz exacta que espera el Frontend React.
    */
-  private mapToResponse(account: any) {
+  private mapToResponse(account: AccountWithTransactions) {
     return {
       id: account.id,
       ownerName: account.ownerName,
@@ -131,7 +141,7 @@ export class AccountsService {
       balance: Number(account.balance),
       currency: account.currency,
       type: account.type,
-      transactions: account.transactions.map((t: any) => ({
+      transactions: account.transactions.map((t) => ({
         id: t.id,
         type: t.type,
         amount: Number(t.amount),
