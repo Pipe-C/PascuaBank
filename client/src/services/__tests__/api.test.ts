@@ -81,14 +81,7 @@ describe('api service (Capa de Servicios y Normalizador de Errores)', () => {
 
       // If we call getAccount with mock disabled (or error interceptor), it must throw the exception
       await expect(
-        (async () => {
-          try {
-            // Trigger the direct call
-            throw normalizeApiError(networkError);
-          } catch (err) {
-            throw err;
-          }
-        })()
+        Promise.reject(normalizeApiError(networkError))
       ).rejects.toEqual({
         statusCode: 500,
         message: 'No se pudo establecer conexión con el servidor bancario (Error de red).',

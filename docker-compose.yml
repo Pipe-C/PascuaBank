@@ -1,5 +1,5 @@
 services:
-  db:
+  postgres:
     image: postgres:16-alpine
     container_name: pascuabank-db
     restart: unless-stopped
@@ -10,12 +10,38 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pascuabank_pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pascuabank -d pascuabank"]
       interval: 5s
       timeout: 5s
       retries: 5
 
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: pascuabank-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://pascuabank:pascuabank_dev_only@postgres:5432/pascuabank?schema=public"
+      PORT: 3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: pascuabank-frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
 volumes:
-  pascuabank_pgdata:
+  postgres_data:

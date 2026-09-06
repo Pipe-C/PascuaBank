@@ -60,6 +60,7 @@ export function useTransactionForm({
   // Reactively revalidate if balance changes externally
   useEffect(() => {
     if (numericValue !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError(validateAmount(numericValue));
     }
   }, [currentBalance, numericValue, validateAmount]);

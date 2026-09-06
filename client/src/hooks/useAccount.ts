@@ -20,7 +20,9 @@ export function useAccount(accountId: string = '1'): UseAccountReturn {
 
   // Keep an updated reference of current state for safe atomic rollbacks
   const accountRef = useRef<Account | null>(null);
-  accountRef.current = account;
+  useEffect(() => {
+    accountRef.current = account;
+  }, [account]);
 
   const fetchAccount = useCallback(async () => {
     try {
@@ -36,6 +38,7 @@ export function useAccount(accountId: string = '1'): UseAccountReturn {
   }, [accountId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAccount();
   }, [fetchAccount]);
 
