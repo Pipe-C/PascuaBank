@@ -158,7 +158,7 @@ Despliega la totalidad del sistema en contenedores aislados de forma automatizad
    - **Backend (NestJS API REST):** `http://localhost:3000`
    - **Base de Datos (PostgreSQL):** `localhost:5432`
 3. **Poblado Automático de Datos (Seed):**
-   Al iniciar el contenedor del backend se ejecutan automáticamente las migraciones y el seed inicial (definido en [`server/prisma/seed.ts`](file:///c:/Users/USUARIO/Documents/PascuaBank/server/prisma/seed.ts)), creando la cuenta bancaria de prueba predeterminada:
+   Al iniciar el contenedor del backend se ejecutan automáticamente las migraciones y el seed inicial (definido en [`server/prisma/seed.ts`](server/prisma/seed.ts)), creando la cuenta bancaria de prueba predeterminada:
    - **ID de Cuenta:** `"1"`
    - **Número de Cuenta:** `100200300`
    - **Titular:** `Usuario PascuaBank`
@@ -189,7 +189,7 @@ Diseñado para evaluaciones rápidas en máquinas con recursos limitados o sin e
 
 > [!WARNING]
 > **Advertencia de reversión de esquema:**
-> Modificar [`server/prisma/schema.prisma`](file:///c:/Users/USUARIO/Documents/PascuaBank/server/prisma/schema.prisma) a `sqlite` altera un archivo compartido utilizado en los Flujos 1 y 2 (los cuales requieren `postgresql`). Antes de volver a los flujos principales o realizar un commit, debes revertir el cambio ejecutando:
+> Modificar [`server/prisma/schema.prisma`](server/prisma/schema.prisma) a `sqlite` altera un archivo compartido utilizado en los Flujos 1 y 2 (los cuales requieren `postgresql`). Antes de volver a los flujos principales o realizar un commit, debes revertir el cambio ejecutando:
 > ```bash
 > git checkout -- server/prisma/schema.prisma
 > ```
@@ -219,7 +219,7 @@ npm run test:cov    # Cobertura de código
 cd client
 npm run test        # Suite de pruebas unitarias y de integración (Vitest + React Testing Library)
 ```
-> Para más detalles sobre la arquitectura de pruebas y componentes del frontend, consulta el [`client/README.md`](file:///c:/Users/USUARIO/Documents/PascuaBank/client/README.md).
+> Para más detalles sobre la arquitectura de pruebas y componentes del frontend, consulta el [`client/README.md`](client/README.md).
 
 ---
 
