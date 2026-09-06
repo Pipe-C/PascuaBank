@@ -6,6 +6,7 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 
 ## 📑 Tabla de Contenidos
 
+- [Vista Previa del Sistema](#-vista-previa-del-sistema)
 - [Integrantes y Roles](#-integrantes-y-distribución-de-roles-50--50)
 - [Stack Tecnológico](#️-stack-tecnológico)
 - [Arquitectura](#-arquitectura)
@@ -15,6 +16,20 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 - [Documentación de la API](#-documentación-de-la-api)
 - [Testing](#-testing)
 - [Flujo de Trabajo (Git)](#-flujo-de-trabajo-git)
+
+---
+
+## 📸 Vista Previa del Sistema
+
+### Dashboard Principal del Cliente
+![Panel Principal de PascuaBank](docs/assets/foto_menu.png)
+*Interfaz de usuario en React con tarjeta de saldo disponible ($1.500.000 COP), formularios de consignación/retiro e historial de transacciones.*
+
+<br />
+
+### Documentación Interactiva de la API (Swagger)
+![Swagger UI de PascuaBank API](docs/assets/pascuabank_api.png)
+*Especificación OpenAPI (Swagger UI) expuesta en NestJS con la definición de endpoints REST y DTOs de transferencias.*
 
 ---
 
