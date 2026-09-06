@@ -37,7 +37,7 @@ async function main() {
     },
   });
 
-  console.log('🌱 Seed completado exitosamente. Cuenta de prueba:', account.id);
+  console.log('Seed completado exitosamente. Cuenta de prueba:', account.id);
 }
 
 main()
