@@ -11,7 +11,7 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 - [Arquitectura](#-arquitectura)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Requisitos Previos](#-requisitos-previos)
-- [Instalación y Ejecución Local](#-instalación-y-ejecución-local)
+- [Instalación y Flujos de Ejecución](#-instalación-y-flujos-de-ejecución)
 - [Documentación de la API](#-documentación-de-la-api)
 - [Testing](#-testing)
 - [Flujo de Trabajo (Git)](#-flujo-de-trabajo-git)
@@ -22,8 +22,8 @@ Prototipo de aplicación bancaria (monorepo) desarrollado como proyecto académi
 
 | Integrante | Rol | Responsabilidades Principales |
 | :--- | :--- | :--- |
-| **Integrante 1** | Backend & Data Architect | API REST en NestJS, esquema Prisma ORM, reglas de negocio, DTOs y documentación Swagger. |
-| **Integrante 2** | Frontend & Product Lead | UI/UX en React + Vite, integración Axios, validaciones en cliente, documentación y presentación. |
+| **Andrés Goez** | Backend & Data Architect | API REST en NestJS, esquema Prisma ORM, reglas de negocio, DTOs y documentación Swagger. |
+| **Felipe Cano** | Frontend & Product Lead | UI/UX en React + Vite, integración Axios, validaciones en cliente, documentación y presentación. |
 
 ---
 
@@ -90,7 +90,9 @@ PascuaBank/
 
 ---
 
-## 🚀 Instalación y Ejecución Local
+## 🚀 Instalación y Flujos de Ejecución
+
+PascuaBank permite 3 modalidades de ejecución según las necesidades del entorno de desarrollo o evaluación:
 
 ### 1. Clonar el repositorio
 
@@ -99,94 +101,110 @@ git clone https://github.com/Pipe-C/PascuaBank.git
 cd PascuaBank
 ```
 
-### 2. Levantar el Backend (Server)
+---
 
-#### 2.1 Base de datos (PostgreSQL vía Docker — recomendado)
+### Flujo 1: Desarrollo Local (DB en Docker, Apps en Local)
+Ideal para desarrollo activo del frontend o backend con soporte para recarga rápida (HMR / Hot Reload).
 
-En lugar de instalar PostgreSQL de forma nativa, se puede levantar un contenedor con credenciales de desarrollo predefinidas. Desde la raíz del repositorio:
+1. **Levantar únicamente la base de datos PostgreSQL:**
+   ```bash
+   docker compose up -d postgres
+   ```
+2. **Iniciar el Backend (NestJS en puerto 3000):**
+   ```bash
+   cd server
+   npm install
+   npx prisma migrate dev
+   npm run start:dev
+   ```
+3. **Iniciar el Frontend (Vite + React en puerto 5173):**
+   ```bash
+   cd client
+   npm install
+   cp .env.example .env
+   npm run dev
+   ```
+   *Asegúrate de que en `client/.env` las variables estén configuradas como `VITE_API_URL=http://localhost:3000` y `VITE_USE_MOCK=false`.*
 
-```bash
-docker compose up -d
-```
+- **Frontend App:** `http://localhost:5173`
+- **Backend API & Swagger:** `http://localhost:3000/api/docs`
 
-Esto expone Postgres en `localhost:5432` con las credenciales de `docker-compose.yml` (usuario `pascuabank`, base de datos `pascuabank`). Son credenciales **exclusivas de desarrollo local**, no usar en ningún entorno real.
+---
 
-Para detener el contenedor sin perder los datos: `docker compose stop`. Para eliminarlo junto con el volumen de datos: `docker compose down -v`.
+### Flujo 2: Stack Completo en Docker (Producción / Verificación Live)
+Despliega la totalidad del sistema en contenedores aislados de forma automatizada (PostgreSQL, NestJS API y Nginx para el frontend de producción).
 
-> Si prefieres no usar Docker, puedes instalar PostgreSQL nativamente y ajustar `DATABASE_URL` según tu instalación.
+1. **Construir y levantar todo el stack en la raíz del proyecto:**
+   ```bash
+   docker compose up --build
+   ```
+2. **Servicios y Puertos Expuestos:**
+   - **Frontend (Nginx - Producción):** `http://localhost:8080`
+   - **Backend (NestJS API REST):** `http://localhost:3000`
+   - **Base de Datos (PostgreSQL):** `localhost:5432`
+3. **Poblado Automático de Datos (Seed):**
+   Al iniciar el contenedor del backend se ejecutan automáticamente las migraciones y el seed inicial (definido en [`server/prisma/seed.ts`](file:///c:/Users/USUARIO/Documents/PascuaBank/server/prisma/seed.ts)), creando la cuenta bancaria de prueba predeterminada:
+   - **ID de Cuenta:** `"1"`
+   - **Número de Cuenta:** `100200300`
+   - **Titular:** `Usuario PascuaBank`
+   - **Saldo Inicial:** `$1.500.000,00 COP`
 
-#### 2.2 Instalar dependencias y configurar variables de entorno
+---
 
-```bash
-cd server
-npm install
-```
+### Flujo 3: Alternativa Ligera con SQLite (Sin Docker / Sin Postgres)
+Diseñado para evaluaciones rápidas en máquinas con recursos limitados o sin el daemon de Docker disponible.
 
-Crea un archivo `.env` en `server/`:
+1. **Configurar el DataSource en `server/prisma/schema.prisma`:**
+   ```prisma
+   datasource db {
+     provider = "sqlite"
+   }
+   ```
+2. **Configurar la cadena de conexión en `server/.env`:**
+   ```env
+   DATABASE_URL="file:./dev.db"
+   ```
+3. **Poblar la base de datos local e iniciar el servidor:**
+   ```bash
+   cd server
+   npx prisma db push
+   npx tsx prisma/seed.ts
+   npm run start:dev
+   ```
 
-```env
-# Si usas el docker-compose.yml de la raíz, esta URL ya coincide con esas credenciales:
-DATABASE_URL="postgresql://pascuabank:pascuabank_dev_only@localhost:5432/pascuabank"
-
-# Alternativa sin Docker (SQLite, sin instalación adicional):
-# DATABASE_URL="file:./dev.db"
-```
-
-#### 2.3 Migraciones y arranque
-
-```bash
-npx prisma migrate dev
-npm run start:dev
-```
-
-Servidor disponible en: `http://localhost:3000`
-Swagger: `http://localhost:3000/api/docs`
-
-### 3. Levantar el Frontend (Client)
-
-En una nueva terminal:
-
-```bash
-cd client
-npm install
-```
-
-Configurar variables de entorno (opcional para desarrollo desacoplado con mocks, o para integración real con el backend):
-
-```bash
-# Copiar plantilla de variables de entorno
-cp .env.example .env
-
-# Ajustar en .env según el modo deseado:
-# VITE_USE_MOCK=false  -> Modo integración real con NestJS (http://localhost:3000)
-# VITE_USE_MOCK=true   -> Modo desacoplado con datos simulados en memoria
-```
-
-Iniciar el servidor de desarrollo:
-
-```bash
-npm run dev
-```
-
-Cliente disponible en: `http://localhost:5173`
+> [!WARNING]
+> **Advertencia de reversión de esquema:**
+> Modificar [`server/prisma/schema.prisma`](file:///c:/Users/USUARIO/Documents/PascuaBank/server/prisma/schema.prisma) a `sqlite` altera un archivo compartido utilizado en los Flujos 1 y 2 (los cuales requieren `postgresql`). Antes de volver a los flujos principales o realizar un commit, debes revertir el cambio ejecutando:
+> ```bash
+> git checkout -- server/prisma/schema.prisma
+> ```
+> No se debe commitear el archivo `schema.prisma` en modo `sqlite` para mantener la consistencia del repositorio con el equipo.
 
 ---
 
 ## 📖 Documentación de la API
 
 - **Swagger UI:** `http://localhost:3000/api/docs` — interfaz interactiva para probar endpoints en tiempo real.
-- **Postman Collection:** archivo JSON con requests preconfigurados (Deposit, Withdraw, Get Balance) y variables de entorno para pruebas automatizadas. Ubicación: `server/postman/`.
+- **Postman Collection:** archivo JSON con requests preconfigurados (Deposit, Withdraw, Get Balance) y variables de entorno para pruebas automatizadas (ajustar según ubicación real en el proyecto).
 
 ---
 
 ## 🧪 Testing
 
+### Backend (`/server`)
 ```bash
 cd server
-npm run test        # Pruebas unitarias
+npm run test        # Pruebas unitarias (Jest)
 npm run test:e2e    # Pruebas end-to-end
-npm run test:cov    # Cobertura
+npm run test:cov    # Cobertura de código
 ```
+
+### Frontend (`/client`)
+```bash
+cd client
+npm run test        # Suite de pruebas unitarias y de integración (Vitest + React Testing Library)
+```
+> Para más detalles sobre la arquitectura de pruebas y componentes del frontend, consulta el [`client/README.md`](file:///c:/Users/USUARIO/Documents/PascuaBank/client/README.md).
 
 ---
 
